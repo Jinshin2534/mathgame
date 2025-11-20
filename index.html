@@ -285,6 +285,7 @@
       border-radius: 999px;
       padding: 4px;
       background: var(--card-sub-bg);
+      border: 1-px solid var(--border);
       border: 1px solid var(--border);
       margin-top: 2px;
     }
@@ -298,7 +299,7 @@
       background: transparent;
       font-size: 0.95rem;
       cursor: pointer;
-      transition: background 0.15s, color 0.15s, transform 0.05s;
+      transition: background 0.15s, color 0.15s, transform 0.05s, opacity 0.15s;
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -324,21 +325,30 @@
       margin-top: 6px;
       font-size: 0.85rem;
       color: #4b5563;
+      flex-wrap: wrap;
+    }
+
+    .mode-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+      background: #f9fafb;
     }
 
     .mode-btn {
-      border-radius: 999px;
-      border: 1px solid #d1d5db;
-      background: #f9fafb;
+      border-radius: 0;
+      border: none;
+      background: transparent;
       padding: 4px 10px;
       font-size: 0.8rem;
       cursor: pointer;
+      min-height: 28px;
     }
 
     .mode-btn.active {
       background: var(--accent);
       color: #f9fafb;
-      border-color: var(--accent);
     }
 
     /* 問題画面：中央に大きな問題カード */
@@ -463,51 +473,98 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* 4択問題用 */
+    /* 4択問題用 UI 改善 */
     .choice-container {
-      margin-top: 8px;
+      margin-top: 10px;
       display: none;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
     .choice-btn {
       width: 100%;
       text-align: left;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid #d1d5db;
       background: #ffffff;
-      padding: 8px 10px;
+      padding: 10px 12px;
       font-size: 0.9rem;
       display: flex;
-      gap: 8px;
-      align-items: flex-start;
+      gap: 10px;
+      align-items: center;
       cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.03s;
+    }
+
+    .choice-btn:hover {
+      background: #f3f4ff;
+      border-color: #9ca3af;
+    }
+
+    .choice-btn:active {
+      transform: scale(0.99);
     }
 
     .choice-key {
       font-weight: 600;
-      min-width: 1.6em;
+      min-width: 2.2em;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 0;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      font-size: 0.82rem;
+      color: #4b5563;
     }
 
     .choice-text {
       flex: 1;
+      line-height: 1.6;
+      white-space: pre-line;
     }
 
     .choice-btn.selected {
       border-color: var(--accent);
       box-shadow: 0 0 0 2px var(--accent-soft);
-      background: #f3f4ff;
+      background: #eef2ff;
+    }
+
+    .choice-btn.selected .choice-key {
+      background: var(--accent);
+      color: #f9fafb;
+      border-color: var(--accent);
     }
 
     .choice-btn.correct-show {
       border-color: #16a34a;
       box-shadow: 0 0 0 2px #16a34a40;
+      background: #ecfdf3;
+    }
+
+    .choice-btn.correct-show .choice-key {
+      background: #16a34a;
+      color: #f9fafb;
+      border-color: #16a34a;
     }
 
     .choice-btn.wrong-show {
       border-color: #b91c1c;
       box-shadow: 0 0 0 2px #b91c1c40;
+      background: #fef2f2;
+    }
+
+    .choice-btn.wrong-show .choice-key {
+      background: #b91c1c;
+      color: #f9fafb;
+      border-color: #b91c1c;
+    }
+
+    .choice-legend {
+      margin-top: 6px;
+      font-size: 0.78rem;
+      color: #6b7280;
     }
 
     /* 記録一覧 */
@@ -723,8 +780,11 @@
         <!-- 回答形式トグル -->
         <div class="answer-mode-toggle">
           <span>回答形式：</span>
-          <button class="mode-btn active" data-mode="free">記述</button>
-          <button class="mode-btn" data-mode="choice">4択</button>
+          <div class="mode-group">
+            <button class="mode-btn active" data-mode="free">記述</button>
+            <button class="mode-btn" data-mode="choice">4択</button>
+          </div>
+          <span style="font-size:0.78rem;color:#9ca3af;">※タイムアタック設定の形式と連動します</span>
         </div>
       </div>
 
@@ -757,21 +817,24 @@
               <!-- 4択用 -->
               <div id="sets-choice-container" class="choice-container">
                 <button class="choice-btn" data-index="0">
-                  <span class="choice-key">A.</span>
+                  <span class="choice-key">A</span>
                   <span class="choice-text"></span>
                 </button>
                 <button class="choice-btn" data-index="1">
-                  <span class="choice-key">B.</span>
+                  <span class="choice-key">B</span>
                   <span class="choice-text"></span>
                 </button>
                 <button class="choice-btn" data-index="2">
-                  <span class="choice-key">C.</span>
+                  <span class="choice-key">C</span>
                   <span class="choice-text"></span>
                 </button>
                 <button class="choice-btn" data-index="3">
-                  <span class="choice-key">D.</span>
+                  <span class="choice-key">D</span>
                   <span class="choice-text"></span>
                 </button>
+                <div class="choice-legend">
+                  タップして選択 → 「答え合わせ」で正解が緑、不正解が赤で表示されます。
+                </div>
               </div>
 
               <div class="btn-row">
@@ -793,7 +856,7 @@
                 <span class="badge" id="quad-type-label"></span>
               </div>
               <div class="card-sub">
-                形 <code>y = ax² + bx + c</code> の二次関数について、軸・頂点・最大/最小を求める問題です。
+                形 <code>y = ax² + bx + c</code> の二次関数について、軸・頂点・最大/最小・定義域・値域を求める問題です。
               </div>
 
               <div class="question-text" id="quad-question"></div>
@@ -802,28 +865,31 @@
               <div id="quad-free-area">
                 <label for="quad-answer" id="quad-answer-label">答え</label>
                 <input type="text" id="quad-answer"
-                       placeholder="例：2 / 1,-3 / 上に開く,-1 など" />
+                       placeholder="例：2 / 1,-3 / 上に開く,-1 / y≧-1 など" />
                 <div class="hint" id="quad-hint"></div>
               </div>
 
               <!-- 4択用 -->
               <div id="quad-choice-container" class="choice-container">
                 <button class="choice-btn" data-index="0">
-                  <span class="choice-key">A.</span>
+                  <span class="choice-key">A</span>
                   <span class="choice-text"></span>
                 </button>
                 <button class="choice-btn" data-index="1">
-                  <span class="choice-key">B.</span>
+                  <span class="choice-key">B</span>
                   <span class="choice-text"></span>
                 </button>
                 <button class="choice-btn" data-index="2">
-                  <span class="choice-key">C.</span>
+                  <span class="choice-key">C</span>
                   <span class="choice-text"></span>
                 </button>
                 <button class="choice-btn" data-index="3">
-                  <span class="choice-key">D.</span>
+                  <span class="choice-key">D</span>
                   <span class="choice-text"></span>
                 </button>
+                <div class="choice-legend">
+                  軸・頂点・値域なども4択で確認できます。
+                </div>
               </div>
 
               <div class="btn-row">
@@ -1058,7 +1124,6 @@
 
     timerBtnEl.addEventListener("click", () => {
       if (!timeAttack.currentRunConfig) {
-        // 設定なしで押された場合は、デフォルト設定で開始
         const cfg = {
           seconds: timeAttack.baseSeconds || 60,
           rangeSets: enabledSets,
@@ -1085,11 +1150,15 @@
       const isFree = answerMode === "free";
 
       // 集合
-      document.getElementById("sets-free-area").style.display = isFree ? "block" : "none";
+      document.getElementById("sets-free-area").style.display = isFree ? "block" : "block";
+      document.getElementById("sets-free-area").style.visibility = isFree ? "visible" : "hidden";
+      document.getElementById("sets-free-area").style.height = isFree ? "auto" : "0";
       document.getElementById("sets-choice-container").style.display = isFree ? "none" : "flex";
 
       // 二次関数
-      document.getElementById("quad-free-area").style.display = isFree ? "block" : "none";
+      document.getElementById("quad-free-area").style.display = isFree ? "block" : "block";
+      document.getElementById("quad-free-area").style.visibility = isFree ? "visible" : "hidden";
+      document.getElementById("quad-free-area").style.height = isFree ? "auto" : "0";
       document.getElementById("quad-choice-container").style.display = isFree ? "none" : "flex";
 
       // アクティブなパネルの問題を再生成
@@ -1162,11 +1231,9 @@
         playerName
       };
 
-      // 問題画面へ
       homeScreen.classList.add("hidden");
       practiceScreen.classList.remove("hidden");
 
-      // 出題範囲に合わせてタブ
       if (cfg.rangeSets && cfg.rangeQuad) {
         document.querySelectorAll(".tab").forEach(t => t.classList.remove("disabled"));
       } else if (cfg.rangeSets) {
@@ -1258,7 +1325,6 @@
       });
 
       if (answerMode === "choice") {
-        // 4択
         if (!Array.isArray(CHOICE_SET_PROBLEMS) || CHOICE_SET_PROBLEMS.length === 0) {
           qEl.textContent = "4択用の集合問題がありません。choice_problems.js を確認してください。";
           typeLabelEl.textContent = "4択";
@@ -1287,7 +1353,6 @@
           }
         });
       } else {
-        // 記述
         if (!Array.isArray(SET_PROBLEMS) || SET_PROBLEMS.length === 0) {
           qEl.textContent = "問題バンク（SET_PROBLEMS）が空です。problems.js を確認してください。";
           typeLabelEl.textContent = "";
@@ -1343,7 +1408,6 @@
           resultEl.className = "result wrong";
         }
       } else {
-        // 記述
         const inputStr = document.getElementById("sets-answer").value;
         const userSet = parseSetInput(inputStr);
         const correctAns = (currentSetProblem.answer || []).slice().sort((a,b)=>a-b);
@@ -1377,7 +1441,6 @@
       ex.style.display = "block";
     });
 
-    // 集合: 記述Enter
     document.getElementById("sets-answer").addEventListener("keydown", (e) => {
       if (e.key === "Enter" && answerMode === "free") {
         e.preventDefault();
@@ -1385,7 +1448,6 @@
       }
     });
 
-    // 集合: 4択ボタン
     document.querySelectorAll("#sets-choice-container .choice-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         if (answerMode !== "choice") return;
@@ -1475,6 +1537,7 @@
       const resEl = document.getElementById("quad-result");
       const prob = currentQuadProblem;
 
+      // 4択モード
       if (prob.mode === "choice") {
         if (quadSelectedChoiceIndex === null) {
           resEl.textContent = "選択肢を1つ選んでから「答え合わせ」を押してください。";
@@ -1508,59 +1571,70 @@
           resEl.textContent = "不正解です。正しい選択肢を緑で表示しています。";
           resEl.className = "result wrong";
         }
+        return;
+      }
+
+      // 記述式モード
+      const inputRaw = document.getElementById("quad-answer").value.trim();
+      if (inputRaw === "") {
+        resEl.textContent = "何か入力してから「答え合わせ」を押してください。";
+        resEl.className = "result wrong";
+        return;
+      }
+
+      let correct = false;
+      const ans = prob.answer || {};
+      const inputNoSpace = inputRaw.replace(/\s+/g, "");
+
+      if (ans.kind === "axis") {
+        const num = Number(inputRaw.replace("x=","").trim());
+        if (!Number.isNaN(num) && num === ans.p) correct = true;
+
+      } else if (ans.kind === "vertex") {
+        let s = inputRaw.replace(/[()]/g,"");
+        const parts = s.split(",");
+        if (parts.length === 2) {
+          const px = Number(parts[0].trim());
+          const py = Number(parts[1].trim());
+          if (!Number.isNaN(px) && !Number.isNaN(py) && px === ans.p && py === ans.q) {
+            correct = true;
+          }
+        }
+
+      } else if (ans.kind === "open_extreme") {
+        const parts = inputRaw.split(",");
+        if (parts.length >= 2) {
+          const textPart = parts[0].trim();
+          const valuePart = Number(parts[1].trim());
+          if (
+            textPart === ans.opens &&
+            !Number.isNaN(valuePart) &&
+            valuePart === ans.extremeValue
+          ) {
+            correct = true;
+          }
+        }
+
+      } else if (ans.kind === "domain" || ans.kind === "range") {
+        const target = (ans.text || "").replace(/\s+/g, "");
+        if (target && inputNoSpace === target) {
+          correct = true;
+        }
+      }
+
+      if (!prob.checked) {
+        score.total += 1;
+        if (correct) score.correct += 1;
+        prob.checked = true;
+        updateScoreUI();
+      }
+
+      if (correct) {
+        resEl.textContent = "正解！いい感じです。";
+        resEl.className = "result correct";
       } else {
-        const input = document.getElementById("quad-answer").value.trim();
-        if (input === "") {
-          resEl.textContent = "何か入力してから「答え合わせ」を押してください。";
-          resEl.className = "result wrong";
-          return;
-        }
-
-        let correct = false;
-        const ans = prob.answer || {};
-
-        if (ans.kind === "axis") {
-          const num = Number(input.replace("x=","").trim());
-          if (!Number.isNaN(num) && num === ans.p) correct = true;
-        } else if (ans.kind === "vertex") {
-          let s = input.replace(/[()]/g,"");
-          const parts = s.split(",");
-          if (parts.length === 2) {
-            const px = Number(parts[0].trim());
-            const py = Number(parts[1].trim());
-            if (!Number.isNaN(px) && !Number.isNaN(py) && px === ans.p && py === ans.q) {
-              correct = true;
-            }
-          }
-        } else if (ans.kind === "open_extreme") {
-          const parts = input.split(",");
-          if (parts.length >= 2) {
-            const textPart = parts[0].trim();
-            const valuePart = Number(parts[1].trim());
-            if (
-              textPart === ans.opens &&
-              !Number.isNaN(valuePart) &&
-              valuePart === ans.extremeValue
-            ) {
-              correct = true;
-            }
-          }
-        }
-
-        if (!prob.checked) {
-          score.total += 1;
-          if (correct) score.correct += 1;
-          prob.checked = true;
-          updateScoreUI();
-        }
-
-        if (correct) {
-          resEl.textContent = "正解！いい感じです。";
-          resEl.className = "result correct";
-        } else {
-          resEl.textContent = "不正解です。答え・解説を見て確認しよう。";
-          resEl.className = "result wrong";
-        }
+        resEl.textContent = "不正解です。答え・解説を見て確認しよう。";
+        resEl.className = "result wrong";
       }
     }
 
