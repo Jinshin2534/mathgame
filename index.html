@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>数学テスト練習 - 集合 & 二次関数</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* （スタイルは前回と同じ。省略せず全部載せる） */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+    }
+    .app {
+      max-width: 960px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      padding: 24px 24px 32px;
+    }
+    header {
+      margin-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 8px;
+    }
+    header h1 {
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+    header p {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .status-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 10px 0 18px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      font-size: 0.88rem;
+    }
+    .score-box span {
+      font-weight: 600;
+    }
+    .timer-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .timer-label {
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .tab {
+      flex: 1;
+      padding: 10px 14px;
+      text-align: center;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.05s;
+    }
+    .tab:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+    .tab.active {
+      background: #111827;
+      color: #f9fafb;
+      border-color: #111827;
+    }
+
+    .panel {
+      display: none;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .panel.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      padding: 18px 16px 16px;
+      background: #f9fafb;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    .sub {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+
+    .question-text {
+      margin: 12px 0;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: #4b5563;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #111827;
+      box-shadow: 0 0 0 1px #11182720;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: #111827;
+      color: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.15s, transform 0.05s, box-shadow 0.15s;
+    }
+    button.small {
+      padding: 5px 10px;
+      font-size: 0.8rem;
+    }
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+    }
+    button:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .result {
+      font-size: 0.9rem;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+    .result.correct {
+      color: #15803d;
+      font-weight: 600;
+    }
+    .result.wrong {
+      color: #b91c1c;
+      font-weight: 600;
+    }
+
+    .answer-box {
+      font-size: 0.85rem;
+      background: #111827;
+      color: #f9fafb;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      white-space: pre-line;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      color: #374151;
+      margin-left: 4px;
+    }
+
+    .timer-summary {
+      font-size: 0.8rem;
+      color: #4b5563;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 12px;
+      }
+      .app {
+        padding: 16px 14px 20px;
+      }
+      .status-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+
+  <!-- ここで問題バンクを読み込む -->
+  <script src="problems.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>数学テスト練習サイト（高校）</h1>
+      <p>範囲：<strong>集合</strong>・<strong>二次関数</strong> の基本問題をランダム出題します。</p>
+    </header>
+
+    <div class="status-bar">
+      <div class="score-box">
+        総合スコア：
+        <span id="score-correct">0</span> /
+        <span id="score-total">0</span>
+        （正答率 <span id="score-rate">0</span>%）
+      </div>
+      <div class="timer-box">
+        <span class="timer-label" id="timer-label">タイムアタック：OFF</span>
+        <button id="timer-toggle-btn" class="secondary small">60秒スタート</button>
+      </div>
+    </div>
+    <div id="timer-summary" class="timer-summary"></div>
+
+    <div class="tabs">
+      <button class="tab active" data-target="sets-panel">集合</button>
+      <button class="tab" data-target="quad-panel">二次関数</button>
+    </div>
+
+    <!-- 集合 -->
+    <section id="sets-panel" class="panel active">
+      <div class="card">
+        <div class="section-title">
+          集合の問題
+          <span class="badge" id="sets-type-label"></span>
+        </div>
+        <div class="sub">
+          全体集合 <span style="font-family: 'SF Mono', ui-monospace, Menlo;">U = {1,2,3,4,5,6,7,8,9,10}</span> を使います。
+        </div>
+        <div class="question-text" id="sets-question"></div>
+
+        <label for="sets-answer">答え（例：<code>{1,3,5}</code> または <code>1,3,5</code>）</label>
+        <input type="text" id="sets-answer" placeholder="{1,3,5} のように入力" />
+        <div class="hint">要素がないときは <code>{}</code> または 何も書かずに「空集合」と書いてもOK。</div>
+
+        <div class="btn-row">
+          <button id="sets-check-btn">答え合わせ</button>
+          <button class="secondary" id="sets-next-btn">次の問題</button>
+          <button class="secondary" id="sets-show-btn">答え・解説を見る</button>
+        </div>
+
+        <div id="sets-result" class="result"></div>
+        <div id="sets-explain" class="answer-box" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 二次関数 -->
+    <section id="quad-panel" class="panel">
+      <div class="card">
+        <div class="section-title">
+          二次関数の問題
+          <span class="badge" id="quad-type-label"></span>
+        </div>
+        <div class="sub">
+          形は <code>y = ax² + bx + c</code> で出題されます（頂点・軸などを求める練習）。
+        </div>
+        <div class="question-text" id="quad-question"></div>
+
+        <label for="quad-answer" id="quad-answer-label">答え</label>
+        <input type="text" id="quad-answer" placeholder="例：2  または  1, -3" />
+        <div class="hint" id="quad-hint"></div>
+
+        <div class="btn-row">
+          <button id="quad-check-btn">答え合わせ</button>
+          <button class="secondary" id="quad-next-btn">次の問題</button>
+          <button class="secondary" id="quad-show-btn">答え・解説を見る</button>
+        </div>
+
+        <div id="quad-result" class="result"></div>
+        <div id="quad-explain" class="answer-box" style="display:none;"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ==== 共通ユーティリティ ====
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // ==== タブ切り替え ====
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.target).classList.add('active');
+      });
+    });
+
+    // ==== スコア & タイムアタック ====
+    const score = { total: 0, correct: 0 };
+    function updateScoreUI() {
+      const total = score.total;
+      const correct = score.correct;
+      document.getElementById("score-total").textContent = total;
+      document.getElementById("score-correct").textContent = correct;
+      const rate = total === 0 ? 0 : Math.round((correct / total) * 100);
+      document.getElementById("score-rate").textContent = rate;
+    }
+
+    const timeAttack = {
+      active: false,
+      timeLeft: 0,
+      timerId: null,
+      baseSeconds: 60,
+      startTotal: 0,
+      startCorrect: 0
+    };
+
+    const timerLabelEl = document.getElementById("timer-label");
+    const timerBtnEl = document.getElementById("timer-toggle-btn");
+    const timerSummaryEl = document.getElementById("timer-summary");
+
+    function updateTimerLabel() {
+      if (!timeAttack.active) {
+        timerLabelEl.textContent = "タイムアタック：OFF";
+      } else {
+        timerLabelEl.textContent = `タイムアタック中：残り ${timeAttack.timeLeft} 秒`;
+      }
+    }
+
+    function stopTimeAttack(showResult = true) {
+      timeAttack.active = false;
+      if (timeAttack.timerId) {
+        clearInterval(timeAttack.timerId);
+        timeAttack.timerId = null;
+      }
+      timerBtnEl.textContent = "60秒スタート";
+      updateTimerLabel();
+
+      if (showResult) {
+        const solved = score.total - timeAttack.startTotal;
+        const got = score.correct - timeAttack.startCorrect;
+        const runRate = solved === 0 ? 0 : Math.round((got / solved) * 100);
+        timerSummaryEl.textContent =
+          `今回の60秒チャレンジ：解いた問題数 ${solved}、正解数 ${got}、正答率 ${runRate}%`;
+      }
+    }
+
+    function startTimeAttack() {
+      timeAttack.active = true;
+      timeAttack.timeLeft = timeAttack.baseSeconds;
+      timeAttack.startTotal = score.total;
+      timeAttack.startCorrect = score.correct;
+      timerSummaryEl.textContent = "";
+      timerBtnEl.textContent = "ストップ";
+      updateTimerLabel();
+
+      if (timeAttack.timerId) {
+        clearInterval(timeAttack.timerId);
+      }
+      timeAttack.timerId = setInterval(() => {
+        if (!timeAttack.active) return;
+        timeAttack.timeLeft -= 1;
+        if (timeAttack.timeLeft <= 0) {
+          timeAttack.timeLeft = 0;
+          updateTimerLabel();
+          stopTimeAttack(true);
+          return;
+        }
+        updateTimerLabel();
+      }, 1000);
+    }
+
+    timerBtnEl.addEventListener("click", () => {
+      if (timeAttack.active) {
+        stopTimeAttack(true);
+      } else {
+        startTimeAttack();
+      }
+    });
+
+    // ==== 集合 ====
+    let currentSetProblem = null;
+
+    function parseSetInput(str) {
+      if (!str) return [];
+      str = str.trim();
+      if (str === "" || str === "{}" || str === "∅" || str === "空集合") return [];
+      str = str.replace(/[{}]/g, "");
+      if (str.trim() === "") return [];
+      const parts = str.split(",");
+      const nums = [];
+      for (const p of parts) {
+        const t = p.trim();
+        if (t === "") continue;
+        const v = Number(t);
+        if (!Number.isNaN(v)) nums.push(v);
+      }
+      const unique = [...new Set(nums)];
+      unique.sort((a,b)=>a-b);
+      return unique;
+    }
+
+    function setToStr(S) {
+      if (!S || S.length === 0) return "{}";
+      return "{" + S.join(",") + "}";
+    }
+
+    function generateSetProblem() {
+      if (!Array.isArray(SET_PROBLEMS) || SET_PROBLEMS.length === 0) {
+        document.getElementById("sets-question").textContent =
+          "問題バンク（SET_PROBLEMS）が空です。problems.js を確認してください。";
+        return;
+      }
+      const idx = randInt(0, SET_PROBLEMS.length - 1);
+      const baseProb = SET_PROBLEMS[idx];
+      currentSetProblem = JSON.parse(JSON.stringify(baseProb));
+      currentSetProblem.checked = false;
+
+      document.getElementById("sets-type-label").textContent = currentSetProblem.label || "";
+      document.getElementById("sets-question").textContent = currentSetProblem.question || "";
+      document.getElementById("sets-answer").value = "";
+      document.getElementById("sets-result").textContent = "";
+      document.getElementById("sets-result").className = "result";
+      document.getElementById("sets-explain").style.display = "none";
+      document.getElementById("sets-explain").textContent = "";
+    }
+
+    function checkSetAnswer() {
+      if (!currentSetProblem) return;
+      const inputStr = document.getElementById("sets-answer").value;
+      const userSet = parseSetInput(inputStr);
+      const correctAns = (currentSetProblem.answer || []).slice().sort((a,b)=>a-b);
+
+      const sameLength = userSet.length === correctAns.length;
+      const sameElems = sameLength && userSet.every((v, i) => v === correctAns[i]);
+
+      const resultEl = document.getElementById("sets-result");
+
+      if (!currentSetProblem.checked) {
+        score.total += 1;
+        if (sameElems) score.correct += 1;
+        currentSetProblem.checked = true;
+        updateScoreUI();
+      }
+
+      if (sameElems) {
+        resultEl.textContent = "正解！よくできました。";
+        resultEl.className = "result correct";
+      } else {
+        resultEl.textContent = `不正解です。答えは ${setToStr(correctAns)} です。`;
+        resultEl.className = "result wrong";
+      }
+    }
+
+    document.getElementById("sets-check-btn").addEventListener("click", checkSetAnswer);
+    document.getElementById("sets-next-btn").addEventListener("click", generateSetProblem);
+    document.getElementById("sets-show-btn").addEventListener("click", () => {
+      if (!currentSetProblem) return;
+      const ex = document.getElementById("sets-explain");
+      ex.textContent = currentSetProblem.explain || "（解説が登録されていません）";
+      ex.style.display = "block";
+    });
+
+    // ==== 二次関数 ====
+    let currentQuadProblem = null;
+
+    function generateQuadraticProblem() {
+      if (!Array.isArray(QUAD_PROBLEMS) || QUAD_PROBLEMS.length === 0) {
+        document.getElementById("quad-question").textContent =
+          "問題バンク（QUAD_PROBLEMS）が空です。problems.js を確認してください。";
+        return;
+      }
+      const idx = randInt(0, QUAD_PROBLEMS.length - 1);
+      const baseProb = QUAD_PROBLEMS[idx];
+      currentQuadProblem = JSON.parse(JSON.stringify(baseProb));
+      currentQuadProblem.checked = false;
+
+      document.getElementById("quad-type-label").textContent = currentQuadProblem.label || "";
+      document.getElementById("quad-question").textContent = currentQuadProblem.question || "";
+      document.getElementById("quad-answer").value = "";
+      document.getElementById("quad-result").textContent = "";
+      document.getElementById("quad-result").className = "result";
+      document.getElementById("quad-explain").style.display = "none";
+      document.getElementById("quad-explain").textContent = "";
+
+      const hint = currentQuadProblem.hint || "";
+      const ansFormat = currentQuadProblem.ansFormat || "";
+      document.getElementById("quad-hint").textContent = hint + (ansFormat ? " " + ansFormat : "");
+    }
+
+    function checkQuadraticAnswer() {
+      if (!currentQuadProblem) return;
+      const input = document.getElementById("quad-answer").value.trim();
+      const resEl = document.getElementById("quad-result");
+      const prob = currentQuadProblem;
+
+      if (input === "") {
+        resEl.textContent = "何か入力してから「答え合わせ」を押してください。";
+        resEl.className = "result wrong";
+        return;
+      }
+
+      let correct = false;
+      const ans = prob.answer || {};
+
+      if (ans.kind === "axis") {
+        const num = Number(input.replace("x=","").trim());
+        if (!Number.isNaN(num) && num === ans.p) correct = true;
+      } else if (ans.kind === "vertex") {
+        let s = input.replace(/[()]/g,"");
+        const parts = s.split(",");
+        if (parts.length === 2) {
+          const px = Number(parts[0].trim());
+          const py = Number(parts[1].trim());
+          if (!Number.isNaN(px) && !Number.isNaN(py) && px === ans.p && py === ans.q) {
+            correct = true;
+          }
+        }
+      } else if (ans.kind === "open_extreme") {
+        const parts = input.split(",");
+        if (parts.length >= 2) {
+          const textPart = parts[0].trim();
+          const valuePart = Number(parts[1].trim());
+          if (
+            textPart === ans.opens &&
+            !Number.isNaN(valuePart) &&
+            valuePart === ans.extremeValue
+          ) {
+            correct = true;
+          }
+        }
+      }
+
+      if (!prob.checked) {
+        score.total += 1;
+        if (correct) score.correct += 1;
+        prob.checked = true;
+        updateScoreUI();
+      }
+
+      if (correct) {
+        resEl.textContent = "正解！いい感じです。";
+        resEl.className = "result correct";
+      } else {
+        resEl.textContent = "不正解です。答え・解説を見て確認しよう。";
+        resEl.className = "result wrong";
+      }
+    }
+
+    document.getElementById("quad-check-btn").addEventListener("click", checkQuadraticAnswer);
+    document.getElementById("quad-next-btn").addEventListener("click", generateQuadraticProblem);
+    document.getElementById("quad-show-btn").addEventListener("click", () => {
+      if (!currentQuadProblem) return;
+      const ex = document.getElementById("quad-explain");
+      ex.textContent = currentQuadProblem.explain || "（解説が登録されていません）";
+      ex.style.display = "block";
+    });
+
+    // 初期表示
+    generateSetProblem();
+    generateQuadraticProblem();
+    updateScoreUI();
+    updateTimerLabel();
+  </script>
+</body>
+</html>
