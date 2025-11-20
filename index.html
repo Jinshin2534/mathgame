@@ -192,7 +192,54 @@
       margin-bottom: 4px;
     }
 
-    /* ステータスバー（問題画面） */
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .input-row label {
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+
+    .input-row input[type="number"],
+    .input-row input[type="text"] {
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 0.9rem;
+      min-width: 70px;
+    }
+
+    .input-row input[type="number"]:focus,
+    .input-row input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-soft);
+    }
+
+    .radio-row,
+    .check-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+
+    .radio-row label,
+    .check-row label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* スコア・タイマー（問題画面） */
     .status-bar {
       display: flex;
       flex-wrap: wrap;
@@ -260,8 +307,38 @@
       color: #f9fafb;
     }
 
+    .tab.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
     .tab:active {
       transform: scale(0.98);
+    }
+
+    /* 回答形式トグル */
+    .answer-mode-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+
+    .mode-btn {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .mode-btn.active {
+      background: var(--accent);
+      color: #f9fafb;
+      border-color: var(--accent);
     }
 
     /* 問題画面：中央に大きな問題カード */
@@ -286,7 +363,7 @@
 
     .practice-inner {
       width: 100%;
-      max-width: 760px;  /* ★ ここで中央に大きく、でも行き過ぎない幅に */
+      max-width: 760px;
     }
 
     .panel {
@@ -386,6 +463,79 @@
       -webkit-overflow-scrolling: touch;
     }
 
+    /* 4択問題用 */
+    .choice-container {
+      margin-top: 8px;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      padding: 8px 10px;
+      font-size: 0.9rem;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      cursor: pointer;
+    }
+
+    .choice-key {
+      font-weight: 600;
+      min-width: 1.6em;
+    }
+
+    .choice-text {
+      flex: 1;
+    }
+
+    .choice-btn.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-soft);
+      background: #f3f4ff;
+    }
+
+    .choice-btn.correct-show {
+      border-color: #16a34a;
+      box-shadow: 0 0 0 2px #16a34a40;
+    }
+
+    .choice-btn.wrong-show {
+      border-color: #b91c1c;
+      box-shadow: 0 0 0 2px #b91c1c40;
+    }
+
+    /* 記録一覧 */
+    .record-list {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #4b5563;
+      max-height: 180px;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .record-row {
+      display: grid;
+      grid-template-columns: 1.2fr 0.7fr 0.7fr 1fr 1fr;
+      gap: 4px;
+      padding: 3px 0;
+      border-bottom: 1px dashed #e5e7eb;
+    }
+
+    .record-head {
+      font-weight: 600;
+      color: #111827;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 4px;
+      margin-bottom: 2px;
+    }
+
     /* 小さめ画面用（スマホ・iPad縦） */
     @media (max-width: 900px) {
       body {
@@ -413,6 +563,10 @@
       .practice-inner {
         max-width: 100%;
       }
+
+      .record-row {
+        grid-template-columns: 1fr 0.7fr 0.7fr 0.8fr 0.8fr;
+      }
     }
 
     /* iPad横〜PC */
@@ -423,19 +577,22 @@
     }
   </style>
 
-  <!-- 問題バンク -->
+  <!-- 記述式用問題バンク -->
   <script src="problems.js"></script>
+  <!-- 4択専用問題バンク -->
+  <script src="choice_problems.js"></script>
 </head>
 <body>
   <div class="app">
     <header>
       <h1>数学テスト練習（集合・二次関数）</h1>
-      <p>スタートページでポイントを確認してから、集中モードで問題を解きまくるテスト勉強用アプリです。</p>
+      <p>スタートページでポイントと設定を決めてから、集中モードで問題を解きまくるテスト勉強用アプリです。</p>
     </header>
 
     <!-- ホーム画面 -->
     <section id="home-screen">
       <div class="home-main">
+        <!-- 通常練習・概要 -->
         <div class="card">
           <div class="home-title">テスト前のチェックリスト</div>
           <p class="home-lead">
@@ -446,6 +603,7 @@
             <span class="chip">集合</span>
             <span class="chip">二次関数</span>
             <span class="chip">タイムアタック</span>
+            <span class="chip">4択モード</span>
           </div>
           <ul class="home-checklist">
             <li>☑ 集合の「積・和・補集合」の意味は思い出せる？</li>
@@ -455,27 +613,54 @@
           </ul>
 
           <div class="btn-row">
-            <button id="start-btn">▶ 練習をはじめる</button>
+            <button id="start-normal-btn">▶ 通常練習をはじめる</button>
             <button id="start-sets-btn" class="secondary">
-              集合からスタート
+              集合だけで練習
             </button>
             <button id="start-quad-btn" class="secondary">
-              二次関数からスタート
+              二次関数だけで練習
             </button>
           </div>
         </div>
 
+        <!-- タイムアタック設定 -->
         <div class="card">
-          <div class="home-section-title">使い方のコツ</div>
-          <ul class="home-checklist">
-            <li>・まずはゆっくり正解を目指して、慣れてきたらタイムアタックON。</li>
-            <li>・分からなかった問題は、必ず「答え・解説を見る」で式の流れを確認。</li>
-            <li>・1回で終わらせず、同じ問題がまた出てきたときに「一瞬で答えられるか」を意識。</li>
-            <li>・iPadなら横画面にすると、問題カードがちょうどよく中央に出て見やすい。</li>
-          </ul>
+          <div class="home-section-title">タイムアタック設定</div>
+
+          <div class="input-row">
+            <label for="config-seconds">時間：</label>
+            <input type="number" id="config-seconds" value="60" min="10" max="600" step="10" />
+            <span>秒（10〜600秒）</span>
+          </div>
+
+          <div class="card-sub" style="margin-top:8px;">出題範囲</div>
+          <div class="check-row">
+            <label><input type="checkbox" id="config-range-sets" checked /> 集合</label>
+            <label><input type="checkbox" id="config-range-quad" checked /> 二次関数</label>
+          </div>
+
+          <div class="card-sub" style="margin-top:8px;">回答形式</div>
+          <div class="radio-row">
+            <label><input type="radio" name="config-answer-mode" value="free" checked /> 記述式</label>
+            <label><input type="radio" name="config-answer-mode" value="choice" /> 4択</label>
+          </div>
+
+          <div class="input-row">
+            <label for="config-player-name">プレイヤー名：</label>
+            <input type="text" id="config-player-name" placeholder="例：のざき" />
+          </div>
+
+          <div class="btn-row">
+            <button id="start-timeattack-btn">🔥 タイムアタックを開始</button>
+          </div>
+
+          <p class="card-sub" style="margin-top:6px;">
+            ※ 友だちと同じ設定で1人ずつタイムアタックすると、下の「記録一覧」で対戦できます。
+          </p>
         </div>
       </div>
 
+      <!-- 分野ごとのチェックポイント ＋ 記録 -->
       <div class="card">
         <div class="home-section-title">分野ごとのチェックポイント</div>
         <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;">
@@ -497,6 +682,13 @@
             </ul>
           </div>
         </div>
+
+        <div style="margin-top:10px;">
+          <div class="home-section-title">タイムアタック記録（最近の結果）</div>
+          <div class="record-list" id="record-list">
+            <!-- JSで埋める -->
+          </div>
+        </div>
       </div>
     </section>
 
@@ -506,6 +698,9 @@
         <!-- スコア & タイマー -->
         <div class="status-bar">
           <div class="score-box">
+            <button id="back-home-btn" class="secondary small" style="margin-right:8px;">
+              ← スタートに戻る
+            </button>
             スコア：
             <span id="score-correct">0</span> /
             <span id="score-total">0</span>
@@ -514,7 +709,7 @@
           <div class="timer-box">
             <span class="chip">タイムアタック</span>
             <span class="timer-label" id="timer-label">OFF</span>
-            <button id="timer-toggle-btn" class="secondary small">60秒スタート</button>
+            <button id="timer-toggle-btn" class="secondary small">開始 / 一時停止</button>
           </div>
         </div>
         <div id="timer-summary" class="timer-summary"></div>
@@ -523,6 +718,13 @@
         <div class="tabs">
           <button class="tab active" data-target="sets-panel">集合</button>
           <button class="tab" data-target="quad-panel">二次関数</button>
+        </div>
+
+        <!-- 回答形式トグル -->
+        <div class="answer-mode-toggle">
+          <span>回答形式：</span>
+          <button class="mode-btn active" data-mode="free">記述</button>
+          <button class="mode-btn" data-mode="choice">4択</button>
         </div>
       </div>
 
@@ -542,11 +744,34 @@
 
               <div class="question-text" id="sets-question"></div>
 
-              <label for="sets-answer">答え</label>
-              <input type="text" id="sets-answer" inputmode="numeric"
-                     placeholder="{1,3,5} または 1,3,5 のように入力" />
-              <div class="hint">
-                要素がないときは <code>{}</code> や「空集合」と入力してもOK。
+              <!-- 記述式入力 -->
+              <div id="sets-free-area">
+                <label for="sets-answer">答え</label>
+                <input type="text" id="sets-answer" inputmode="numeric"
+                       placeholder="{1,3,5} または 1,3,5 のように入力" />
+                <div class="hint">
+                  要素がないときは <code>{}</code> や「空集合」と入力してもOK。
+                </div>
+              </div>
+
+              <!-- 4択用 -->
+              <div id="sets-choice-container" class="choice-container">
+                <button class="choice-btn" data-index="0">
+                  <span class="choice-key">A.</span>
+                  <span class="choice-text"></span>
+                </button>
+                <button class="choice-btn" data-index="1">
+                  <span class="choice-key">B.</span>
+                  <span class="choice-text"></span>
+                </button>
+                <button class="choice-btn" data-index="2">
+                  <span class="choice-key">C.</span>
+                  <span class="choice-text"></span>
+                </button>
+                <button class="choice-btn" data-index="3">
+                  <span class="choice-key">D.</span>
+                  <span class="choice-text"></span>
+                </button>
               </div>
 
               <div class="btn-row">
@@ -573,10 +798,33 @@
 
               <div class="question-text" id="quad-question"></div>
 
-              <label for="quad-answer" id="quad-answer-label">答え</label>
-              <input type="text" id="quad-answer"
-                     placeholder="例：2 / 1,-3 / 上に開く,-1 など" />
-              <div class="hint" id="quad-hint"></div>
+              <!-- 記述式 -->
+              <div id="quad-free-area">
+                <label for="quad-answer" id="quad-answer-label">答え</label>
+                <input type="text" id="quad-answer"
+                       placeholder="例：2 / 1,-3 / 上に開く,-1 など" />
+                <div class="hint" id="quad-hint"></div>
+              </div>
+
+              <!-- 4択用 -->
+              <div id="quad-choice-container" class="choice-container">
+                <button class="choice-btn" data-index="0">
+                  <span class="choice-key">A.</span>
+                  <span class="choice-text"></span>
+                </button>
+                <button class="choice-btn" data-index="1">
+                  <span class="choice-key">B.</span>
+                  <span class="choice-text"></span>
+                </button>
+                <button class="choice-btn" data-index="2">
+                  <span class="choice-key">C.</span>
+                  <span class="choice-text"></span>
+                </button>
+                <button class="choice-btn" data-index="3">
+                  <span class="choice-key">D.</span>
+                  <span class="choice-text"></span>
+                </button>
+              </div>
 
               <div class="btn-row">
                 <button id="quad-check-btn">✅ 答え合わせ</button>
@@ -599,51 +847,25 @@
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    function nowString() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const h = String(d.getHours()).padStart(2, "0");
+      const min = String(d.getMinutes()).padStart(2, "0");
+      return `${y}/${m}/${day} ${h}:${min}`;
+    }
+
     const homeScreen = document.getElementById("home-screen");
     const practiceScreen = document.getElementById("practice-screen");
 
-    function showPractice(startTab) {
-      homeScreen.classList.add("hidden");
-      practiceScreen.classList.remove("hidden");
-      if (startTab === "sets") {
-        switchTab("sets-panel");
-      } else if (startTab === "quad") {
-        switchTab("quad-panel");
-      }
-      setTimeout(() => {
-        if (startTab === "quad") {
-          document.getElementById("quad-answer").focus();
-        } else {
-          document.getElementById("sets-answer").focus();
-        }
-      }, 80);
-    }
+    // 回答形式: "free" or "choice"
+    let answerMode = "free";
 
-    document.getElementById("start-btn").addEventListener("click", () => showPractice("sets"));
-    document.getElementById("start-sets-btn").addEventListener("click", () => showPractice("sets"));
-    document.getElementById("start-quad-btn").addEventListener("click", () => showPractice("quad"));
-
-    // ==== タブ切り替え ====
-    const tabs = document.querySelectorAll('.tab');
-    const panels = document.querySelectorAll('.panel');
-
-    function switchTab(targetId) {
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.target === targetId));
-      panels.forEach(p => p.classList.toggle('active', p.id === targetId));
-    }
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        switchTab(tab.dataset.target);
-        setTimeout(() => {
-          if (tab.dataset.target === "sets-panel") {
-            document.getElementById("sets-answer").focus();
-          } else {
-            document.getElementById("quad-answer").focus();
-          }
-        }, 40);
-      });
-    });
+    // 出題範囲（タイムアタック設定で更新）
+    let enabledSets = true;
+    let enabledQuad = true;
 
     // ==== スコア ====
     const score = { total: 0, correct: 0 };
@@ -663,7 +885,8 @@
       timerId: null,
       baseSeconds: 60,
       startTotal: 0,
-      startCorrect: 0
+      startCorrect: 0,
+      currentRunConfig: null
     };
 
     const timerLabelEl = document.getElementById("timer-label");
@@ -678,13 +901,69 @@
       }
     }
 
+    function saveRecord(record) {
+      const key = "math_quiz_timeattack_records";
+      const raw = localStorage.getItem(key);
+      let list = [];
+      if (raw) {
+        try { list = JSON.parse(raw); } catch (e) { list = []; }
+      }
+      list.unshift(record); // 先頭に追加
+      if (list.length > 30) list = list.slice(0, 30);
+      localStorage.setItem(key, JSON.stringify(list));
+      renderRecords();
+    }
+
+    function renderRecords() {
+      const listEl = document.getElementById("record-list");
+      const key = "math_quiz_timeattack_records";
+      const raw = localStorage.getItem(key);
+      let list = [];
+      if (raw) {
+        try { list = JSON.parse(raw); } catch (e) { list = []; }
+      }
+      if (list.length === 0) {
+        listEl.textContent = "まだ記録はありません。タイムアタックをするとここに表示されます。";
+        return;
+      }
+
+      listEl.innerHTML = "";
+      const head = document.createElement("div");
+      head.className = "record-row record-head";
+      head.innerHTML = `
+        <span>日時 / プレイヤー</span>
+        <span>時間</span>
+        <span>分野</span>
+        <span>形式</span>
+        <span>結果</span>
+      `;
+      listEl.appendChild(head);
+
+      list.forEach(r => {
+        const row = document.createElement("div");
+        row.className = "record-row";
+        const fields = [
+          `${r.time} / ${r.player || "匿名"}`,
+          `${r.seconds}s`,
+          r.rangeLabel,
+          r.mode === "choice" ? "4択" : "記述",
+          `${r.correct}/${r.solved} (${r.rate}%)`
+        ];
+        fields.forEach(t => {
+          const span = document.createElement("span");
+          span.textContent = t;
+          row.appendChild(span);
+        });
+        listEl.appendChild(row);
+      });
+    }
+
     function stopTimeAttack(showResult = true) {
       timeAttack.active = false;
       if (timeAttack.timerId) {
         clearInterval(timeAttack.timerId);
         timeAttack.timerId = null;
       }
-      timerBtnEl.textContent = "60秒スタート";
       updateTimerLabel();
 
       if (showResult) {
@@ -692,17 +971,38 @@
         const got = score.correct - timeAttack.startCorrect;
         const runRate = solved === 0 ? 0 : Math.round((got / solved) * 100);
         timerSummaryEl.textContent =
-          `今回の60秒チャレンジ：解いた問題数 ${solved}、正解数 ${got}、正答率 ${runRate}%`;
+          `今回のチャレンジ：解いた問題数 ${solved}、正解数 ${got}、正答率 ${runRate}%`;
+
+        if (timeAttack.currentRunConfig) {
+          const cfg = timeAttack.currentRunConfig;
+          const rangeLabel =
+            cfg.rangeSets && cfg.rangeQuad
+              ? "集合+二次"
+              : cfg.rangeSets
+                ? "集合のみ"
+                : "二次のみ";
+
+          const record = {
+            time: nowString(),
+            player: cfg.playerName || "匿名",
+            seconds: cfg.seconds,
+            rangeLabel,
+            mode: cfg.answerMode,
+            solved,
+            correct: got,
+            rate: runRate
+          };
+          saveRecord(record);
+        }
       }
     }
 
-    function startTimeAttack() {
+    function startTimeAttackInternal() {
       timeAttack.active = true;
       timeAttack.timeLeft = timeAttack.baseSeconds;
       timeAttack.startTotal = score.total;
       timeAttack.startCorrect = score.correct;
       timerSummaryEl.textContent = "";
-      timerBtnEl.textContent = "ストップ";
       updateTimerLabel();
 
       if (timeAttack.timerId) {
@@ -721,16 +1021,201 @@
       }, 1000);
     }
 
-    timerBtnEl.addEventListener("click", () => {
-      if (timeAttack.active) {
-        stopTimeAttack(true);
+    function startTimeAttackFromConfig(cfg) {
+      // cfg: {seconds, rangeSets, rangeQuad, answerMode, playerName}
+      enabledSets = !!cfg.rangeSets;
+      enabledQuad = !!cfg.rangeQuad;
+      if (!enabledSets && !enabledQuad) {
+        enabledSets = true;
+        enabledQuad = true;
+      }
+      timeAttack.baseSeconds = cfg.seconds;
+      timeAttack.currentRunConfig = { ...cfg };
+
+      // タブ有効/無効
+      document.querySelectorAll(".tab").forEach(tab => {
+        if (tab.dataset.target === "sets-panel") {
+          tab.classList.toggle("disabled", !enabledSets);
+        } else if (tab.dataset.target === "quad-panel") {
+          tab.classList.toggle("disabled", !enabledQuad);
+        }
+      });
+
+      // 最初に表示するタブ
+      if (enabledSets) {
+        switchTab("sets-panel");
       } else {
-        startTimeAttack();
+        switchTab("quad-panel");
+      }
+
+      // 回答形式
+      answerMode = cfg.answerMode === "choice" ? "choice" : "free";
+      applyAnswerModeToUI();
+
+      // タイマー開始
+      startTimeAttackInternal();
+    }
+
+    timerBtnEl.addEventListener("click", () => {
+      if (!timeAttack.currentRunConfig) {
+        // 設定なしで押された場合は、デフォルト設定で開始
+        const cfg = {
+          seconds: timeAttack.baseSeconds || 60,
+          rangeSets: enabledSets,
+          rangeQuad: enabledQuad,
+          answerMode,
+          playerName: ""
+        };
+        timeAttack.currentRunConfig = cfg;
+      }
+      if (timeAttack.active) {
+        stopTimeAttack(false);
+      } else {
+        startTimeAttackInternal();
       }
     });
 
-    // ==== 集合 ====
+    // ==== 回答形式トグル ====
+    const modeButtons = document.querySelectorAll(".mode-btn");
+    function applyAnswerModeToUI() {
+      modeButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.mode === answerMode);
+      });
+
+      const isFree = answerMode === "free";
+
+      // 集合
+      document.getElementById("sets-free-area").style.display = isFree ? "block" : "none";
+      document.getElementById("sets-choice-container").style.display = isFree ? "none" : "flex";
+
+      // 二次関数
+      document.getElementById("quad-free-area").style.display = isFree ? "block" : "none";
+      document.getElementById("quad-choice-container").style.display = isFree ? "none" : "flex";
+
+      // アクティブなパネルの問題を再生成
+      const activePanel = document.querySelector(".panel.active");
+      if (activePanel && activePanel.id === "sets-panel") {
+        generateSetProblem();
+      } else if (activePanel && activePanel.id === "quad-panel") {
+        generateQuadraticProblem();
+      }
+    }
+
+    modeButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const mode = btn.dataset.mode;
+        answerMode = mode === "choice" ? "choice" : "free";
+        applyAnswerModeToUI();
+      });
+    });
+
+    // ==== ホーム→問題画面遷移 ====
+    function showPractice(startArea) {
+      homeScreen.classList.add("hidden");
+      practiceScreen.classList.remove("hidden");
+
+      if (startArea === "sets") {
+        enabledSets = true; enabledQuad = false;
+        document.querySelectorAll(".tab").forEach(t => {
+          t.classList.toggle("disabled", t.dataset.target === "quad-panel");
+        });
+        switchTab("sets-panel");
+      } else if (startArea === "quad") {
+        enabledSets = false; enabledQuad = true;
+        document.querySelectorAll(".tab").forEach(t => {
+          t.classList.toggle("disabled", t.dataset.target === "sets-panel");
+        });
+        switchTab("quad-panel");
+      } else {
+        enabledSets = true; enabledQuad = true;
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("disabled"));
+      }
+
+      setTimeout(() => {
+        const activePanel = document.querySelector(".panel.active");
+        if (activePanel && activePanel.id === "sets-panel") {
+          document.getElementById("sets-answer").focus();
+        } else {
+          document.getElementById("quad-answer").focus();
+        }
+      }, 80);
+    }
+
+    document.getElementById("start-normal-btn").addEventListener("click", () => showPractice("both"));
+    document.getElementById("start-sets-btn").addEventListener("click", () => showPractice("sets"));
+    document.getElementById("start-quad-btn").addEventListener("click", () => showPractice("quad"));
+
+    // タイムアタック開始ボタン
+    document.getElementById("start-timeattack-btn").addEventListener("click", () => {
+      const seconds = Number(document.getElementById("config-seconds").value) || 60;
+      const rangeSets = document.getElementById("config-range-sets").checked;
+      const rangeQuad = document.getElementById("config-range-quad").checked;
+      const playerName = document.getElementById("config-player-name").value.trim();
+      const modeInput = document.querySelector("input[name='config-answer-mode']:checked");
+      const mode = modeInput ? modeInput.value : "free";
+
+      const cfg = {
+        seconds: Math.min(Math.max(seconds, 10), 600),
+        rangeSets,
+        rangeQuad,
+        answerMode: mode,
+        playerName
+      };
+
+      // 問題画面へ
+      homeScreen.classList.add("hidden");
+      practiceScreen.classList.remove("hidden");
+
+      // 出題範囲に合わせてタブ
+      if (cfg.rangeSets && cfg.rangeQuad) {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("disabled"));
+      } else if (cfg.rangeSets) {
+        document.querySelectorAll(".tab").forEach(t => {
+          t.classList.toggle("disabled", t.dataset.target === "quad-panel");
+        });
+      } else if (cfg.rangeQuad) {
+        document.querySelectorAll(".tab").forEach(t => {
+          t.classList.toggle("disabled", t.dataset.target === "sets-panel");
+        });
+      }
+
+      startTimeAttackFromConfig(cfg);
+    });
+
+    // スタートに戻る
+    const backHomeBtn = document.getElementById("back-home-btn");
+    backHomeBtn.addEventListener("click", () => {
+      practiceScreen.classList.add("hidden");
+      homeScreen.classList.remove("hidden");
+      stopTimeAttack(false); // 記録は残さず停止
+    });
+
+    // ==== タブ切り替え ====
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.panel');
+
+    function switchTab(targetId) {
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.target === targetId));
+      panels.forEach(p => p.classList.toggle('active', p.id === targetId));
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        if (tab.classList.contains("disabled")) return;
+        switchTab(tab.dataset.target);
+        setTimeout(() => {
+          if (tab.dataset.target === "sets-panel") {
+            document.getElementById("sets-answer").focus();
+          } else {
+            document.getElementById("quad-answer").focus();
+          }
+        }, 40);
+      });
+    });
+
+    // ==== 集合（記述 & 4択）====
     let currentSetProblem = null;
+    let setsSelectedChoiceIndex = null;
 
     function parseSetInput(str) {
       if (!str) return [];
@@ -757,49 +1242,129 @@
     }
 
     function generateSetProblem() {
-      if (!Array.isArray(SET_PROBLEMS) || SET_PROBLEMS.length === 0) {
-        document.getElementById("sets-question").textContent =
-          "問題バンク（SET_PROBLEMS）が空です。problems.js を確認してください。";
-        return;
-      }
-      const idx = randInt(0, SET_PROBLEMS.length - 1);
-      const baseProb = SET_PROBLEMS[idx];
-      currentSetProblem = JSON.parse(JSON.stringify(baseProb));
-      currentSetProblem.checked = false;
+      const typeLabelEl = document.getElementById("sets-type-label");
+      const qEl = document.getElementById("sets-question");
+      const resEl = document.getElementById("sets-result");
+      const exEl = document.getElementById("sets-explain");
 
-      document.getElementById("sets-type-label").textContent = currentSetProblem.label || "";
-      document.getElementById("sets-question").textContent = currentSetProblem.question || "";
+      resEl.textContent = "";
+      resEl.className = "result";
+      exEl.style.display = "none";
+      exEl.textContent = "";
       document.getElementById("sets-answer").value = "";
-      document.getElementById("sets-result").textContent = "";
-      document.getElementById("sets-result").className = "result";
-      document.getElementById("sets-explain").style.display = "none";
-      document.getElementById("sets-explain").textContent = "";
+      setsSelectedChoiceIndex = null;
+      document.querySelectorAll("#sets-choice-container .choice-btn").forEach(btn => {
+        btn.classList.remove("selected", "correct-show", "wrong-show");
+      });
+
+      if (answerMode === "choice") {
+        // 4択
+        if (!Array.isArray(CHOICE_SET_PROBLEMS) || CHOICE_SET_PROBLEMS.length === 0) {
+          qEl.textContent = "4択用の集合問題がありません。choice_problems.js を確認してください。";
+          typeLabelEl.textContent = "4択";
+          currentSetProblem = null;
+          return;
+        }
+        const idx = randInt(0, CHOICE_SET_PROBLEMS.length - 1);
+        const baseProb = CHOICE_SET_PROBLEMS[idx];
+        currentSetProblem = {
+          mode: "choice",
+          question: baseProb.question,
+          explain: baseProb.explain,
+          choices: baseProb.choices.slice(),
+          correctIndex: baseProb.correctIndex,
+          checked: false
+        };
+
+        typeLabelEl.textContent = "4択";
+        qEl.textContent = currentSetProblem.question;
+
+        const choiceButtons = document.querySelectorAll("#sets-choice-container .choice-btn");
+        currentSetProblem.choices.forEach((text, i) => {
+          const btn = choiceButtons[i];
+          if (btn) {
+            btn.querySelector(".choice-text").textContent = text;
+          }
+        });
+      } else {
+        // 記述
+        if (!Array.isArray(SET_PROBLEMS) || SET_PROBLEMS.length === 0) {
+          qEl.textContent = "問題バンク（SET_PROBLEMS）が空です。problems.js を確認してください。";
+          typeLabelEl.textContent = "";
+          currentSetProblem = null;
+          return;
+        }
+        const idx = randInt(0, SET_PROBLEMS.length - 1);
+        const baseProb = SET_PROBLEMS[idx];
+        currentSetProblem = JSON.parse(JSON.stringify(baseProb));
+        currentSetProblem.mode = "free";
+        currentSetProblem.checked = false;
+
+        typeLabelEl.textContent = currentSetProblem.label || "";
+        qEl.textContent = currentSetProblem.question || "";
+      }
     }
 
     function checkSetAnswer() {
       if (!currentSetProblem) return;
-      const inputStr = document.getElementById("sets-answer").value;
-      const userSet = parseSetInput(inputStr);
-      const correctAns = (currentSetProblem.answer || []).slice().sort((a,b)=>a-b);
-
-      const sameLength = userSet.length === correctAns.length;
-      const sameElems = sameLength && userSet.every((v, i) => v === correctAns[i]);
-
       const resultEl = document.getElementById("sets-result");
 
-      if (!currentSetProblem.checked) {
-        score.total += 1;
-        if (sameElems) score.correct += 1;
-        currentSetProblem.checked = true;
-        updateScoreUI();
-      }
+      if (currentSetProblem.mode === "choice") {
+        if (setsSelectedChoiceIndex === null) {
+          resultEl.textContent = "選択肢を1つ選んでから「答え合わせ」を押してください。";
+          resultEl.className = "result wrong";
+          return;
+        }
+        const correct = setsSelectedChoiceIndex === currentSetProblem.correctIndex;
 
-      if (sameElems) {
-        resultEl.textContent = "正解！よくできました。";
-        resultEl.className = "result correct";
+        if (!currentSetProblem.checked) {
+          score.total += 1;
+          if (correct) score.correct += 1;
+          currentSetProblem.checked = true;
+          updateScoreUI();
+        }
+
+        const btns = document.querySelectorAll("#sets-choice-container .choice-btn");
+        btns.forEach(btn => {
+          const idx = Number(btn.dataset.index);
+          btn.classList.remove("correct-show", "wrong-show");
+          if (idx === currentSetProblem.correctIndex) {
+            btn.classList.add("correct-show");
+          } else if (idx === setsSelectedChoiceIndex && !correct) {
+            btn.classList.add("wrong-show");
+          }
+        });
+
+        if (correct) {
+          resultEl.textContent = "正解！いい感じです。";
+          resultEl.className = "result correct";
+        } else {
+          resultEl.textContent = "不正解です。正しい選択肢を緑で表示しています。";
+          resultEl.className = "result wrong";
+        }
       } else {
-        resultEl.textContent = `不正解です。正解は ${setToStr(correctAns)} です。`;
-        resultEl.className = "result wrong";
+        // 記述
+        const inputStr = document.getElementById("sets-answer").value;
+        const userSet = parseSetInput(inputStr);
+        const correctAns = (currentSetProblem.answer || []).slice().sort((a,b)=>a-b);
+
+        const sameLength = userSet.length === correctAns.length;
+        const sameElems = sameLength && userSet.every((v, i) => v === correctAns[i]);
+
+        if (!currentSetProblem.checked) {
+          score.total += 1;
+          if (sameElems) score.correct += 1;
+          currentSetProblem.checked = true;
+          updateScoreUI();
+        }
+
+        if (sameElems) {
+          resultEl.textContent = "正解！よくできました。";
+          resultEl.className = "result correct";
+        } else {
+          resultEl.textContent = `不正解です。正解は ${setToStr(correctAns)} です。`;
+          resultEl.className = "result wrong";
+        }
       }
     }
 
@@ -812,96 +1377,190 @@
       ex.style.display = "block";
     });
 
+    // 集合: 記述Enter
     document.getElementById("sets-answer").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
+      if (e.key === "Enter" && answerMode === "free") {
         e.preventDefault();
         checkSetAnswer();
       }
     });
 
-    // ==== 二次関数 ====
+    // 集合: 4択ボタン
+    document.querySelectorAll("#sets-choice-container .choice-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (answerMode !== "choice") return;
+        const idx = Number(btn.dataset.index);
+        setsSelectedChoiceIndex = idx;
+        document.querySelectorAll("#sets-choice-container .choice-btn").forEach(b => {
+          b.classList.remove("selected");
+        });
+        btn.classList.add("selected");
+      });
+    });
+
+    // ==== 二次関数（記述 & 4択）====
     let currentQuadProblem = null;
+    let quadSelectedChoiceIndex = null;
 
     function generateQuadraticProblem() {
-      if (!Array.isArray(QUAD_PROBLEMS) || QUAD_PROBLEMS.length === 0) {
-        document.getElementById("quad-question").textContent =
-          "問題バンク（QUAD_PROBLEMS）が空です。problems.js を確認してください。";
-        return;
-      }
-      const idx = randInt(0, QUAD_PROBLEMS.length - 1);
-      const baseProb = QUAD_PROBLEMS[idx];
-      currentQuadProblem = JSON.parse(JSON.stringify(baseProb));
-      currentQuadProblem.checked = false;
+      const typeLabelEl = document.getElementById("quad-type-label");
+      const qEl = document.getElementById("quad-question");
+      const resEl = document.getElementById("quad-result");
+      const exEl = document.getElementById("quad-explain");
+      const hintEl = document.getElementById("quad-hint");
 
-      document.getElementById("quad-type-label").textContent = currentQuadProblem.label || "";
-      document.getElementById("quad-question").textContent = currentQuadProblem.question || "";
+      resEl.textContent = "";
+      resEl.className = "result";
+      exEl.style.display = "none";
+      exEl.textContent = "";
       document.getElementById("quad-answer").value = "";
-      document.getElementById("quad-result").textContent = "";
-      document.getElementById("quad-result").className = "result";
-      document.getElementById("quad-explain").style.display = "none";
-      document.getElementById("quad-explain").textContent = "";
+      quadSelectedChoiceIndex = null;
+      document.querySelectorAll("#quad-choice-container .choice-btn").forEach(btn => {
+        btn.classList.remove("selected", "correct-show", "wrong-show");
+      });
 
-      const hint = currentQuadProblem.hint || "";
-      const ansFormat = currentQuadProblem.ansFormat || "";
-      document.getElementById("quad-hint").textContent = hint + (ansFormat ? " " + ansFormat : "");
+      if (answerMode === "choice") {
+        if (!Array.isArray(CHOICE_QUAD_PROBLEMS) || CHOICE_QUAD_PROBLEMS.length === 0) {
+          qEl.textContent = "4択用の二次関数問題がありません。choice_problems.js を確認してください。";
+          typeLabelEl.textContent = "4択";
+          hintEl.textContent = "";
+          currentQuadProblem = null;
+          return;
+        }
+        const idx = randInt(0, CHOICE_QUAD_PROBLEMS.length - 1);
+        const baseProb = CHOICE_QUAD_PROBLEMS[idx];
+        currentQuadProblem = {
+          mode: "choice",
+          question: baseProb.question,
+          explain: baseProb.explain,
+          choices: baseProb.choices.slice(),
+          correctIndex: baseProb.correctIndex,
+          checked: false
+        };
+        typeLabelEl.textContent = "4択";
+        qEl.textContent = currentQuadProblem.question;
+        hintEl.textContent = "";
+
+        const choiceButtons = document.querySelectorAll("#quad-choice-container .choice-btn");
+        currentQuadProblem.choices.forEach((text, i) => {
+          const btn = choiceButtons[i];
+          if (btn) {
+            btn.querySelector(".choice-text").textContent = text;
+          }
+        });
+      } else {
+        if (!Array.isArray(QUAD_PROBLEMS) || QUAD_PROBLEMS.length === 0) {
+          qEl.textContent = "問題バンク（QUAD_PROBLEMS）が空です。problems.js を確認してください。";
+          typeLabelEl.textContent = "";
+          hintEl.textContent = "";
+          currentQuadProblem = null;
+          return;
+        }
+        const idx = randInt(0, QUAD_PROBLEMS.length - 1);
+        const baseProb = QUAD_PROBLEMS[idx];
+        currentQuadProblem = JSON.parse(JSON.stringify(baseProb));
+        currentQuadProblem.mode = "free";
+        currentQuadProblem.checked = false;
+
+        typeLabelEl.textContent = currentQuadProblem.label || "";
+        qEl.textContent = currentQuadProblem.question || "";
+        const hint = currentQuadProblem.hint || "";
+        const ansFormat = currentQuadProblem.ansFormat || "";
+        hintEl.textContent = hint + (ansFormat ? " " + ansFormat : "");
+      }
     }
 
     function checkQuadraticAnswer() {
       if (!currentQuadProblem) return;
-      const input = document.getElementById("quad-answer").value.trim();
       const resEl = document.getElementById("quad-result");
       const prob = currentQuadProblem;
 
-      if (input === "") {
-        resEl.textContent = "何か入力してから「答え合わせ」を押してください。";
-        resEl.className = "result wrong";
-        return;
-      }
-
-      let correct = false;
-      const ans = prob.answer || {};
-
-      if (ans.kind === "axis") {
-        const num = Number(input.replace("x=","").trim());
-        if (!Number.isNaN(num) && num === ans.p) correct = true;
-      } else if (ans.kind === "vertex") {
-        let s = input.replace(/[()]/g,"");
-        const parts = s.split(",");
-        if (parts.length === 2) {
-          const px = Number(parts[0].trim());
-          const py = Number(parts[1].trim());
-          if (!Number.isNaN(px) && !Number.isNaN(py) && px === ans.p && py === ans.q) {
-            correct = true;
-          }
+      if (prob.mode === "choice") {
+        if (quadSelectedChoiceIndex === null) {
+          resEl.textContent = "選択肢を1つ選んでから「答え合わせ」を押してください。";
+          resEl.className = "result wrong";
+          return;
         }
-      } else if (ans.kind === "open_extreme") {
-        const parts = input.split(",");
-        if (parts.length >= 2) {
-          const textPart = parts[0].trim();
-          const valuePart = Number(parts[1].trim());
-          if (
-            textPart === ans.opens &&
-            !Number.isNaN(valuePart) &&
-            valuePart === ans.extremeValue
-          ) {
-            correct = true;
-          }
+        const correct = quadSelectedChoiceIndex === prob.correctIndex;
+
+        if (!prob.checked) {
+          score.total += 1;
+          if (correct) score.correct += 1;
+          prob.checked = true;
+          updateScoreUI();
         }
-      }
 
-      if (!prob.checked) {
-        score.total += 1;
-        if (correct) score.correct += 1;
-        prob.checked = true;
-        updateScoreUI();
-      }
+        const btns = document.querySelectorAll("#quad-choice-container .choice-btn");
+        btns.forEach(btn => {
+          const idx = Number(btn.dataset.index);
+          btn.classList.remove("correct-show", "wrong-show");
+          if (idx === prob.correctIndex) {
+            btn.classList.add("correct-show");
+          } else if (idx === quadSelectedChoiceIndex && !correct) {
+            btn.classList.add("wrong-show");
+          }
+        });
 
-      if (correct) {
-        resEl.textContent = "正解！いい感じです。";
-        resEl.className = "result correct";
+        if (correct) {
+          resEl.textContent = "正解！いい感じです。";
+          resEl.className = "result correct";
+        } else {
+          resEl.textContent = "不正解です。正しい選択肢を緑で表示しています。";
+          resEl.className = "result wrong";
+        }
       } else {
-        resEl.textContent = "不正解です。答え・解説を見て確認しよう。";
-        resEl.className = "result wrong";
+        const input = document.getElementById("quad-answer").value.trim();
+        if (input === "") {
+          resEl.textContent = "何か入力してから「答え合わせ」を押してください。";
+          resEl.className = "result wrong";
+          return;
+        }
+
+        let correct = false;
+        const ans = prob.answer || {};
+
+        if (ans.kind === "axis") {
+          const num = Number(input.replace("x=","").trim());
+          if (!Number.isNaN(num) && num === ans.p) correct = true;
+        } else if (ans.kind === "vertex") {
+          let s = input.replace(/[()]/g,"");
+          const parts = s.split(",");
+          if (parts.length === 2) {
+            const px = Number(parts[0].trim());
+            const py = Number(parts[1].trim());
+            if (!Number.isNaN(px) && !Number.isNaN(py) && px === ans.p && py === ans.q) {
+              correct = true;
+            }
+          }
+        } else if (ans.kind === "open_extreme") {
+          const parts = input.split(",");
+          if (parts.length >= 2) {
+            const textPart = parts[0].trim();
+            const valuePart = Number(parts[1].trim());
+            if (
+              textPart === ans.opens &&
+              !Number.isNaN(valuePart) &&
+              valuePart === ans.extremeValue
+            ) {
+              correct = true;
+            }
+          }
+        }
+
+        if (!prob.checked) {
+          score.total += 1;
+          if (correct) score.correct += 1;
+          prob.checked = true;
+          updateScoreUI();
+        }
+
+        if (correct) {
+          resEl.textContent = "正解！いい感じです。";
+          resEl.className = "result correct";
+        } else {
+          resEl.textContent = "不正解です。答え・解説を見て確認しよう。";
+          resEl.className = "result wrong";
+        }
       }
     }
 
@@ -915,17 +1574,31 @@
     });
 
     document.getElementById("quad-answer").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
+      if (e.key === "Enter" && answerMode === "free") {
         e.preventDefault();
         checkQuadraticAnswer();
       }
     });
 
-    // ==== 初期生成（ホーム画面の裏で問題を用意） ====
+    document.querySelectorAll("#quad-choice-container .choice-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (answerMode !== "choice") return;
+        const idx = Number(btn.dataset.index);
+        quadSelectedChoiceIndex = idx;
+        document.querySelectorAll("#quad-choice-container .choice-btn").forEach(b => {
+          b.classList.remove("selected");
+        });
+        btn.classList.add("selected");
+      });
+    });
+
+    // ==== 初期設定 ====
     generateSetProblem();
     generateQuadraticProblem();
     updateScoreUI();
     updateTimerLabel();
+    applyAnswerModeToUI();
+    renderRecords();
   </script>
 </body>
 </html>
