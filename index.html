@@ -14,8 +14,8 @@
       --text-sub: #6b7280;
       --accent: #111827;
       --accent-soft: #11182720;
-      --radius-lg: 18px;
-      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
     }
 
     * {
@@ -40,21 +40,22 @@
       max-width: 1024px;
       background: var(--card-bg);
       border-radius: var(--radius-lg);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.08);
-      padding: 16px 14px 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+      padding: 18px 16px 22px;
+      min-height: calc(100vh - 32px);
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      min-height: calc(100vh - 32px);
+      gap: 16px;
     }
 
     header {
       border-bottom: 1px solid var(--border);
       padding-bottom: 10px;
+      margin-bottom: 4px;
     }
 
     header h1 {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       margin-bottom: 4px;
     }
 
@@ -64,7 +65,134 @@
       line-height: 1.5;
     }
 
-    /* ステータスバー（スコア・タイマー） */
+    .hidden {
+      display: none !important;
+    }
+
+    /* 共通カード */
+    .card {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 16px 14px 14px;
+      background: var(--card-sub-bg);
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-sub {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+
+    .chip {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: var(--accent);
+      color: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: background 0.15s, transform 0.05s, box-shadow 0.15s;
+      min-height: 40px;
+      min-width: 80px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    button.small {
+      padding: 6px 12px;
+      min-height: 32px;
+      font-size: 0.85rem;
+    }
+
+    button:active {
+      transform: scale(0.97);
+      box-shadow: none;
+    }
+
+    /* ホーム画面 */
+    #home-screen {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .home-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .home-title {
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+    }
+
+    .home-lead {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .home-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 4px 0 2px;
+    }
+
+    .home-checklist {
+      font-size: 0.85rem;
+      color: #4b5563;
+      line-height: 1.6;
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .home-checklist li {
+      margin-bottom: 2px;
+    }
+
+    .home-section-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    /* ステータスバー（問題画面） */
     .status-bar {
       display: flex;
       flex-wrap: wrap;
@@ -90,14 +218,6 @@
       justify-content: flex-end;
     }
 
-    .chip {
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      background: #e5e7eb;
-      color: #374151;
-    }
-
     .timer-label {
       font-size: 0.85rem;
       color: #4b5563;
@@ -119,6 +239,7 @@
       padding: 4px;
       background: var(--card-sub-bg);
       border: 1px solid var(--border);
+      margin-top: 2px;
     }
 
     .tab {
@@ -143,12 +264,29 @@
       transform: scale(0.98);
     }
 
-    /* メインコンテンツレイアウト */
-    .main-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-      gap: 14px;
-      align-items: flex-start;
+    /* 問題画面：中央に大きな問題カード */
+    #practice-screen {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .practice-head {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .practice-layout {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding-top: 4px;
+    }
+
+    .practice-inner {
+      width: 100%;
+      max-width: 760px;  /* ★ ここで中央に大きく、でも行き過ぎない幅に */
     }
 
     .panel {
@@ -162,13 +300,6 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(4px); }
       to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .card {
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      padding: 16px 14px 14px;
-      background: var(--card-sub-bg);
     }
 
     .section-title {
@@ -189,12 +320,6 @@
       border-radius: 999px;
       background: #e5e7eb;
       color: #374151;
-    }
-
-    .sub {
-      font-size: 0.8rem;
-      color: var(--text-sub);
-      margin-bottom: 6px;
     }
 
     .question-text {
@@ -234,48 +359,6 @@
       margin-bottom: 4px;
     }
 
-    .btn-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 6px;
-      margin-bottom: 8px;
-    }
-
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 10px 16px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      background: var(--accent);
-      color: #f9fafb;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      transition: background 0.15s, transform 0.05s, box-shadow 0.15s;
-      min-height: 40px;   /* タッチしやすい高さ */
-      min-width: 80px;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    button.secondary {
-      background: #e5e7eb;
-      color: #111827;
-    }
-
-    button.small {
-      padding: 6px 12px;
-      min-height: 32px;
-      font-size: 0.85rem;
-    }
-
-    button:active {
-      transform: scale(0.97);
-      box-shadow: none;
-    }
-
     .result {
       font-size: 0.9rem;
       margin-top: 4px;
@@ -303,30 +386,7 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    .side-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .tip-list {
-      font-size: 0.8rem;
-      color: #4b5563;
-      line-height: 1.5;
-      padding-left: 18px;
-    }
-
-    .tip-list li {
-      margin-bottom: 4px;
-    }
-
-    .side-section-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    /* スマホ・iPad縦向け対応 */
+    /* 小さめ画面用（スマホ・iPad縦） */
     @media (max-width: 900px) {
       body {
         padding: 8px;
@@ -338,7 +398,7 @@
         box-shadow: none;
       }
 
-      .main-layout {
+      .home-main {
         grid-template-columns: minmax(0, 1fr);
       }
 
@@ -347,20 +407,18 @@
       }
 
       .btn-row button {
-        width: 100%;    /* iPad/スマホで押しやすいようにフル幅 */
+        width: 100%;
+      }
+
+      .practice-inner {
+        max-width: 100%;
       }
     }
 
-    /* iPad 横向きなど、やや広い時は少し文字を大きく */
-    @media (min-width: 768px) and (max-width: 1024px) {
-      header h1 {
-        font-size: 1.5rem;
-      }
+    /* iPad横〜PC */
+    @media (min-width: 768px) and (max-width: 1100px) {
       body {
         padding: 12px;
-      }
-      .app {
-        padding: 20px 18px 22px;
       }
     }
   </style>
@@ -372,123 +430,167 @@
   <div class="app">
     <header>
       <h1>数学テスト練習（集合・二次関数）</h1>
-      <p>高校数学のテスト対策用。iPadでも使いやすいタッチUIで、集合と二次関数の問題をテンポよく解いていきます。</p>
+      <p>スタートページでポイントを確認してから、集中モードで問題を解きまくるテスト勉強用アプリです。</p>
     </header>
 
-    <!-- スコア & タイマー -->
-    <div class="status-bar">
-      <div class="score-box">
-        スコア：
-        <span id="score-correct">0</span> /
-        <span id="score-total">0</span>
-        （正答率 <span id="score-rate">0</span>%）
-      </div>
-      <div class="timer-box">
-        <span class="chip">タイムアタックモード</span>
-        <span class="timer-label" id="timer-label">OFF</span>
-        <button id="timer-toggle-btn" class="secondary small">60秒スタート</button>
-      </div>
-    </div>
-    <div id="timer-summary" class="timer-summary"></div>
-
-    <!-- タブ -->
-    <div class="tabs">
-      <button class="tab active" data-target="sets-panel">集合</button>
-      <button class="tab" data-target="quad-panel">二次関数</button>
-    </div>
-
-    <!-- メインレイアウト（左：問題 / 右：ヒント・解説） -->
-    <div class="main-layout">
-      <!-- 集合パネル -->
-      <section id="sets-panel" class="panel active">
+    <!-- ホーム画面 -->
+    <section id="home-screen">
+      <div class="home-main">
         <div class="card">
-          <div class="section-title">
-            集合の問題
-            <span class="badge" id="sets-type-label"></span>
+          <div class="home-title">テスト前のチェックリスト</div>
+          <p class="home-lead">
+            集合と二次関数の基本問題を、スピードと正確さの両方から鍛えます。<br>
+            iPadでもPCでも、そのままブラウザから使えます。
+          </p>
+          <div class="home-badge-row">
+            <span class="chip">集合</span>
+            <span class="chip">二次関数</span>
+            <span class="chip">タイムアタック</span>
           </div>
-          <div class="sub">
-            全体集合 <span style="font-family: 'SF Mono', ui-monospace, Menlo;">U = {1,2,3,4,5,6,7,8,9,10}</span> を前提とします。
-          </div>
-
-          <div class="question-text" id="sets-question"></div>
-
-          <label for="sets-answer">答え</label>
-          <input type="text" id="sets-answer" inputmode="numeric"
-                 placeholder="{1,3,5} または 1,3,5 のように入力" />
-          <div class="hint">
-            要素がないときは <code>{}</code> や「空集合」と入力してもOK。
-          </div>
+          <ul class="home-checklist">
+            <li>☑ 集合の「積・和・補集合」の意味は思い出せる？</li>
+            <li>☑ 二次関数の軸は <code>x = -b / (2a)</code> としてすぐ出せる？</li>
+            <li>☑ 頂点の y 座標は「代入して求める」イメージがある？</li>
+            <li>☑ 最大値・最小値は「頂点の y 座標」だと説明できる？</li>
+          </ul>
 
           <div class="btn-row">
-            <button id="sets-check-btn">✅ 答え合わせ</button>
-            <button class="secondary" id="sets-next-btn">➡ 次の問題</button>
-            <button class="secondary" id="sets-show-btn">👀 答え・解説を見る</button>
+            <button id="start-btn">▶ 練習をはじめる</button>
+            <button id="start-sets-btn" class="secondary">
+              集合からスタート
+            </button>
+            <button id="start-quad-btn" class="secondary">
+              二次関数からスタート
+            </button>
           </div>
-
-          <div id="sets-result" class="result"></div>
-          <div id="sets-explain" class="answer-box" style="display:none;"></div>
         </div>
-      </section>
 
-      <!-- 二次関数パネル -->
-      <section id="quad-panel" class="panel">
         <div class="card">
-          <div class="section-title">
-            二次関数の問題
-            <span class="badge" id="quad-type-label"></span>
-          </div>
-          <div class="sub">
-            形 <code>y = ax² + bx + c</code> の二次関数について、軸・頂点・最大/最小を求める問題です。
-          </div>
-
-          <div class="question-text" id="quad-question"></div>
-
-          <label for="quad-answer" id="quad-answer-label">答え</label>
-          <input type="text" id="quad-answer"
-                 placeholder="例：2 または 1,-3 または 上に開く,-1" />
-          <div class="hint" id="quad-hint"></div>
-
-          <div class="btn-row">
-            <button id="quad-check-btn">✅ 答え合わせ</button>
-            <button class="secondary" id="quad-next-btn">➡ 次の問題</button>
-            <button class="secondary" id="quad-show-btn">👀 答え・解説を見る</button>
-          </div>
-
-          <div id="quad-result" class="result"></div>
-          <div id="quad-explain" class="answer-box" style="display:none;"></div>
-        </div>
-      </section>
-
-      <!-- 右側：Tips & 学習メモ -->
-      <aside class="side-panel">
-        <div class="card">
-          <div class="side-section-title">使い方のコツ</div>
-          <ul class="tip-list">
-            <li>iPadなら画面を横向きにすると、問題と解説が見やすくなります。</li>
-            <li>Enterキーでも答え合わせできるので、キーボードでもサクサク解けます。</li>
-            <li>タイムアタックをONにして「解くスピード」を鍛えるのもおすすめ。</li>
+          <div class="home-section-title">使い方のコツ</div>
+          <ul class="home-checklist">
+            <li>・まずはゆっくり正解を目指して、慣れてきたらタイムアタックON。</li>
+            <li>・分からなかった問題は、必ず「答え・解説を見る」で式の流れを確認。</li>
+            <li>・1回で終わらせず、同じ問題がまた出てきたときに「一瞬で答えられるか」を意識。</li>
+            <li>・iPadなら横画面にすると、問題カードがちょうどよく中央に出て見やすい。</li>
           </ul>
         </div>
-        <div class="card">
-          <div class="side-section-title">集合のチェックポイント</div>
-          <ul class="tip-list">
-            <li>積集合：両方に入っている要素だけ。</li>
-            <li>和集合：どちらか一方でも入っていればOK。</li>
-            <li>補集合：U から A を抜いた残り。</li>
-          </ul>
+      </div>
+
+      <div class="card">
+        <div class="home-section-title">分野ごとのチェックポイント</div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;">
+          <div>
+            <div class="card-sub"><strong>集合</strong></div>
+            <ul class="home-checklist">
+              <li>・積集合：両方の集合に入っている要素だけ。</li>
+              <li>・和集合：どちらか一方でも入っていればOK。</li>
+              <li>・補集合：全体集合 U から A を引く。</li>
+            </ul>
+          </div>
+          <div>
+            <div class="card-sub"><strong>二次関数</strong></div>
+            <ul class="home-checklist">
+              <li>・軸： <code>x = -b / (2a)</code></li>
+              <li>・頂点： <code>(p, q)</code> で、<code>p = -b / (2a)</code>, <code>q = f(p)</code></li>
+              <li>・a &gt; 0 → 上に開く（最小値あり）</li>
+              <li>・a &lt; 0 → 下に開く（最大値あり）</li>
+            </ul>
+          </div>
         </div>
-        <div class="card">
-          <div class="side-section-title">二次関数のチェックポイント</div>
-          <ul class="tip-list">
-            <li>軸：<code>x = -b / (2a)</code></li>
-            <li>頂点の x座標：<code>p = -b / (2a)</code></li>
-            <li>頂点の y座標：<code>q = f(p)</code> を代入</li>
-            <li>a &gt; 0 → 上に開く（最小値あり）</li>
-            <li>a &lt; 0 → 下に開く（最大値あり）</li>
-          </ul>
+      </div>
+    </section>
+
+    <!-- 問題画面（集中モード） -->
+    <section id="practice-screen" class="hidden">
+      <div class="practice-head">
+        <!-- スコア & タイマー -->
+        <div class="status-bar">
+          <div class="score-box">
+            スコア：
+            <span id="score-correct">0</span> /
+            <span id="score-total">0</span>
+            （正答率 <span id="score-rate">0</span>%）
+          </div>
+          <div class="timer-box">
+            <span class="chip">タイムアタック</span>
+            <span class="timer-label" id="timer-label">OFF</span>
+            <button id="timer-toggle-btn" class="secondary small">60秒スタート</button>
+          </div>
         </div>
-      </aside>
-    </div>
+        <div id="timer-summary" class="timer-summary"></div>
+
+        <!-- タブ -->
+        <div class="tabs">
+          <button class="tab active" data-target="sets-panel">集合</button>
+          <button class="tab" data-target="quad-panel">二次関数</button>
+        </div>
+      </div>
+
+      <!-- 中央に問題カード -->
+      <div class="practice-layout">
+        <div class="practice-inner">
+          <!-- 集合パネル -->
+          <section id="sets-panel" class="panel active">
+            <div class="card">
+              <div class="section-title">
+                集合の問題
+                <span class="badge" id="sets-type-label"></span>
+              </div>
+              <div class="card-sub">
+                全体集合 <span style="font-family:'SF Mono', ui-monospace, Menlo;">U = {1,2,3,4,5,6,7,8,9,10}</span> を前提とします。
+              </div>
+
+              <div class="question-text" id="sets-question"></div>
+
+              <label for="sets-answer">答え</label>
+              <input type="text" id="sets-answer" inputmode="numeric"
+                     placeholder="{1,3,5} または 1,3,5 のように入力" />
+              <div class="hint">
+                要素がないときは <code>{}</code> や「空集合」と入力してもOK。
+              </div>
+
+              <div class="btn-row">
+                <button id="sets-check-btn">✅ 答え合わせ</button>
+                <button class="secondary" id="sets-next-btn">➡ 次の問題</button>
+                <button class="secondary" id="sets-show-btn">👀 答え・解説を見る</button>
+              </div>
+
+              <div id="sets-result" class="result"></div>
+              <div id="sets-explain" class="answer-box" style="display:none;"></div>
+            </div>
+          </section>
+
+          <!-- 二次関数パネル -->
+          <section id="quad-panel" class="panel">
+            <div class="card">
+              <div class="section-title">
+                二次関数の問題
+                <span class="badge" id="quad-type-label"></span>
+              </div>
+              <div class="card-sub">
+                形 <code>y = ax² + bx + c</code> の二次関数について、軸・頂点・最大/最小を求める問題です。
+              </div>
+
+              <div class="question-text" id="quad-question"></div>
+
+              <label for="quad-answer" id="quad-answer-label">答え</label>
+              <input type="text" id="quad-answer"
+                     placeholder="例：2 / 1,-3 / 上に開く,-1 など" />
+              <div class="hint" id="quad-hint"></div>
+
+              <div class="btn-row">
+                <button id="quad-check-btn">✅ 答え合わせ</button>
+                <button class="secondary" id="quad-next-btn">➡ 次の問題</button>
+                <button class="secondary" id="quad-show-btn">👀 答え・解説を見る</button>
+              </div>
+
+              <div id="quad-result" class="result"></div>
+              <div id="quad-explain" class="answer-box" style="display:none;"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
   </div>
 
   <script>
@@ -497,31 +599,53 @@
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    // ==== タブ切り替え（タッチ前提でシンプルに） ====
+    const homeScreen = document.getElementById("home-screen");
+    const practiceScreen = document.getElementById("practice-screen");
+
+    function showPractice(startTab) {
+      homeScreen.classList.add("hidden");
+      practiceScreen.classList.remove("hidden");
+      if (startTab === "sets") {
+        switchTab("sets-panel");
+      } else if (startTab === "quad") {
+        switchTab("quad-panel");
+      }
+      setTimeout(() => {
+        if (startTab === "quad") {
+          document.getElementById("quad-answer").focus();
+        } else {
+          document.getElementById("sets-answer").focus();
+        }
+      }, 80);
+    }
+
+    document.getElementById("start-btn").addEventListener("click", () => showPractice("sets"));
+    document.getElementById("start-sets-btn").addEventListener("click", () => showPractice("sets"));
+    document.getElementById("start-quad-btn").addEventListener("click", () => showPractice("quad"));
+
+    // ==== タブ切り替え ====
     const tabs = document.querySelectorAll('.tab');
     const panels = document.querySelectorAll('.panel');
 
     function switchTab(targetId) {
       tabs.forEach(t => t.classList.toggle('active', t.dataset.target === targetId));
       panels.forEach(p => p.classList.toggle('active', p.id === targetId));
-
-      // 入力欄に自動フォーカス
-      setTimeout(() => {
-        if (targetId === 'sets-panel') {
-          document.getElementById('sets-answer').focus();
-        } else {
-          document.getElementById('quad-answer').focus();
-        }
-      }, 50);
     }
 
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         switchTab(tab.dataset.target);
+        setTimeout(() => {
+          if (tab.dataset.target === "sets-panel") {
+            document.getElementById("sets-answer").focus();
+          } else {
+            document.getElementById("quad-answer").focus();
+          }
+        }, 40);
       });
     });
 
-    // ==== スコア管理 ====
+    // ==== スコア ====
     const score = { total: 0, correct: 0 };
     function updateScoreUI() {
       const total = score.total;
@@ -650,9 +774,6 @@
       document.getElementById("sets-result").className = "result";
       document.getElementById("sets-explain").style.display = "none";
       document.getElementById("sets-explain").textContent = "";
-
-      // フォーカス
-      setTimeout(() => document.getElementById("sets-answer").focus(), 50);
     }
 
     function checkSetAnswer() {
@@ -691,7 +812,6 @@
       ex.style.display = "block";
     });
 
-    // Enterキーで答え合わせ（集合）
     document.getElementById("sets-answer").addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -724,8 +844,6 @@
       const hint = currentQuadProblem.hint || "";
       const ansFormat = currentQuadProblem.ansFormat || "";
       document.getElementById("quad-hint").textContent = hint + (ansFormat ? " " + ansFormat : "");
-
-      setTimeout(() => document.getElementById("quad-answer").focus(), 50);
     }
 
     function checkQuadraticAnswer() {
@@ -796,7 +914,6 @@
       ex.style.display = "block";
     });
 
-    // Enterキーで答え合わせ（二次関数）
     document.getElementById("quad-answer").addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -804,12 +921,11 @@
       }
     });
 
-    // ==== 初期表示 ====
+    // ==== 初期生成（ホーム画面の裏で問題を用意） ====
     generateSetProblem();
     generateQuadraticProblem();
     updateScoreUI();
     updateTimerLabel();
-    document.getElementById('sets-answer').focus();
   </script>
 </body>
 </html>
